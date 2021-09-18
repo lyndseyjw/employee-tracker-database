@@ -1,7 +1,6 @@
 const express = require('express');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-// const fs = require('fs');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -9,9 +8,22 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'Naej777my',
+    database: 'cms_db'
+  },
+  console.log(`Connected to the cms_db database.`)
+);
+
+let sql;
 let departmentName;
 let roleId;
+let employeeId;
 let managerId;
+let employeeArray = ["James Smith", "Maria Garcia", "Elija Wang", "Amelia Lopez", "Leo Hassan", "Isabella Ren", "Asher Bibi", "Nushi Pak", "Mohammed Kumari", "Ana Sanchez", "Robert Mandal", "Jean Sharma", "Carlos Ramirez", "Elena de Oliveira", "Fatima Ghosh", "Sergey Uddin"];
 
 function getData(sql) {  
 
@@ -20,7 +32,9 @@ function getData(sql) {
     if (err) {
       console.log(err);
     }
+    result.json
     console.table(result);
+    choicePrompt();
   });
 }
 
@@ -31,6 +45,7 @@ function postData(sql) {
       console.log(err);
     }
     console.log(`Successfully added to the database`);
+    choicePrompt();
   });
 }
 
@@ -45,7 +60,7 @@ function departmentEntry() {
     ])
     .then(function(data) {
 
-      let sql = `INSERT INTO department (name) VALUES ("${data.department}")`;
+      sql = `INSERT INTO department (name) VALUES ("${data.department}")`;
       postData(sql);
     })
 }
@@ -91,7 +106,7 @@ function roleEntry() {
         break;
       }
 
-      let sql = `INSERT INTO role (title, department_id, salary) VALUES ("${data.role}", ${departmentName}, ${data.salary})`;
+      sql = `INSERT INTO role (title, department_id, salary) VALUES ("${data.role}", ${departmentName}, ${data.salary})`;
       postData(sql);
     })
 }
@@ -214,7 +229,169 @@ function employeeEntry() {
         break;
       }
 
-      let sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${data.first_name}", ${data.last_name}, ${roleId}, ${managerId})`;
+      sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${data.first_name}", "${data.last_name}", ${roleId}, ${managerId})`;
+      employeeArray.push(`${data.first_name} ${data.last_name}`)
+      postData(sql);
+    })
+}
+
+function employeeUpdate() {
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        message: "Which employee's role do you want to update?",
+        name: 'employeeName',
+        choices: [...employeeArray],
+      },
+      {
+        type: 'list',
+        message: "Which role do you want to assign the selected employee?",
+        name: 'roleName',
+        choices: ["Machine Setup Specialist", "Maintenance Personnel", "Machine Operator", "Production Manager", "Front-End Web Developer", "Back-End Web Developer", "Full Stack Web Developer", "Web Development Manager", "Project Manager", "Analytics Specialist", "Brand Manager", "Marketing Analyst", "Payroll", "Financial Statements", "Tax and Compliance", "Finance Manager"],
+      },
+    ])
+    .then(function(data) {
+
+      // const nameArray = data.employeeName.split(" ");
+      // let first_name = nameArray[0];
+      // let last_name = nameArray[1];
+
+      // switch (data.employeeName) {
+
+      //   case "James Smith":
+      //     employeeId = 1;
+      //   break;
+
+      //   case "Maria Garcia":
+      //     employeeId = 2;
+      //   break;
+
+      //   case "Elija Wang":
+      //     employeeId = 3;
+      //   break;
+
+      //   case "Amelia Lopez":
+      //     employeeId = 4;
+      //   break;
+
+      //   case "Leo Hassan":
+      //     employeeId = 5;
+      //   break;
+
+      //   case "Isabella Ren":
+      //     employeeId = 6;
+      //   break;
+
+      //   case "Asher Bibi":
+      //     employeeId = 7;
+      //   break;
+
+      //   case "Nushi Pak":
+      //     employeeId = 8;
+      //   break;
+
+      //   case "Mohammed Kumari":
+      //     employeeId = 9;
+      //   break;
+
+      //   case "Ana Sanchez":
+      //     employeeId = 10;
+      //   break;
+
+      //   case "Robert Mandal":
+      //     employeeId = 11;
+      //   break;
+
+      //   case "Jean Sharma":
+      //     employeeId = 12;
+      //   break;
+
+      //   case "Carlos Ramirez":
+      //     employeeId = 13;
+      //   break;
+
+      //   case "Elena de Oliveira":
+      //     employeeId = 14;
+      //   break;
+
+      //   case "Fatima Ghosh":
+      //     employeeId = 15;
+      //   break;
+
+      //   case "Sergey Uddin":
+      //     employeeId = 16;
+      //   break;
+      // }
+
+      switch (data.roleName) {
+
+        case 'Machine Setup Specialist':
+          roleId = 1;
+        break;
+
+        case 'Maintenance Personnel':
+          roleId = 2;
+        break;
+
+        case 'Machine Operator':
+          roleId = 3;
+        break;
+
+        case 'Production Manager':
+          roleId = 4;
+        break;
+
+        case 'Front-End Web Developer':
+          roleId = 5;
+        break;
+
+        case 'Back-End Web Developer':
+          roleId = 6;
+        break;
+
+        case 'Full Stack Web Developer':
+          roleId = 7;
+        break;
+
+        case 'Web Development Manager':
+          roleId = 8;
+        break;
+
+        case 'Project Manager':
+          roleId = 9;
+        break;
+
+        case 'Analytics Specialist':
+          roleId = 10;
+        break;
+
+        case 'Brand Manager':
+          roleId = 11;
+        break;
+
+        case 'Marketing Analyst':
+          roleId = 12;
+        break;
+
+        case 'Payroll':
+          roleId = 13;
+        break;
+
+        case 'Financial Statements':
+          roleId = 14;
+        break;
+
+        case 'Tax and Compliance':
+          roleId = 15;
+        break;
+
+        case 'Finance Manager':
+          roleId = 16;
+        break;
+      }
+
+      sql = `UPDATE employee SET role_id = ${roleId} WHERE id = "${employeeId}"`
       postData(sql);
     })
 }
@@ -234,17 +411,17 @@ function choicePrompt() {
       switch(data.choice) {
 
         case 'View All Departments':
-          let sql = `SELECT * FROM department`;
+          sql = `SELECT id AS id,  name AS department FROM department`;
           getData(sql);
         break;
 
         case 'View All Roles':
-          let sql = `SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary FROM role LEFT JOIN department ON role.department_id = department.id`;
+          sql = `SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary FROM role LEFT JOIN department ON role.department_id = department.id`;
           getData(sql);
         break;
 
         case 'View All Employees':
-          let sql = `SELECT employee.id AS id, employee.first_name AS first_name, employee.last_name AS last_name, role.title AS title, department.name AS department, role.salary AS salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id`;
+          sql = `SELECT employee.id AS id, employee.first_name AS first_name, employee.last_name AS last_name, role.title AS title, department.name AS department, role.salary AS salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id`;
           getData(sql);
         break;
 
@@ -261,11 +438,18 @@ function choicePrompt() {
         break;
 
         case 'Update an Employee Role':
-          let sql = '';
-          callData(sql);
+          employeeUpdate();
         break;
       }
     })
 }
 
 choicePrompt();
+
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
