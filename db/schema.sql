@@ -19,7 +19,7 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employee (
-    id INT NOT NULL PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INT,
@@ -41,4 +41,7 @@ SELECT employee.id AS id, employee.first_name AS first_name, employee.last_name 
 FROM employee 
 LEFT JOIN role ON employee.role_id = role.id 
 LEFT JOIN department ON role.department_id = department.id 
-LEFT JOIN employee manager ON manager.id = employee.manager_id
+LEFT JOIN employee manager ON manager.id = employee.manager_id;
+
+INSERT INTO department (name)
+VALUES (?)
