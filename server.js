@@ -19,11 +19,12 @@ const db = mysql.createConnection(
 );
 
 let sql;
-let departmentName;
+let departmentId;
 let roleId;
 let employeeId;
 let managerId;
 let employeeArray = ["James Smith", "Maria Garcia", "Elija Wang", "Amelia Lopez", "Leo Hassan", "Isabella Ren", "Asher Bibi", "Nushi Pak", "Mohammed Kumari", "Ana Sanchez", "Robert Mandal", "Jean Sharma", "Carlos Ramirez", "Elena de Oliveira", "Fatima Ghosh", "Sergey Uddin"];
+let departmentArray = ["Production", "Web Development", "Marketing", "Accounting and Finance"];
 
 function getData(sql) {  
 
@@ -61,6 +62,7 @@ function departmentEntry() {
     .then(function(data) {
 
       sql = `INSERT INTO department (name) VALUES ("${data.department}")`;
+      departmentArray.push(`${data.department}`)
       postData(sql);
     })
 }
@@ -82,31 +84,47 @@ function roleEntry() {
         type: 'list',
         message: 'Which department does the role belong to?',
         name: 'department_id',
-        choices: ["Production", "Web Development", "Marketing", "Accounting and Finance"],
+        choices: [...departmentArray],
       },
     ])
     .then(function(data) {
-      
+
       switch (data.department_id) {
 
-        case 'Production':
-          departmentName = 1;
+        case departmentArray[0]:
+          departmentId = 1;
         break;
 
-        case 'Web Development':
-          departmentName = 2;
+        case departmentArray[1]:
+          departmentId = 2;
         break;
 
-        case 'Marketing':
-          departmentName = 3;
+        case departmentArray[2]:
+          departmentId = 3;
         break;
 
-        case 'Accounting and Finance':
-          departmentName = 4;
+        case departmentArray[3]:
+          departmentId = 4;
+        break;
+
+        case departmentArray[4]:
+          departmentId = 5;
+        break;
+
+        case departmentArray[5]:
+          departmentId = 6;
+        break;
+
+        case departmentArray[6]:
+          departmentId = 7;
+        break;
+
+        case departmentArray[7]:
+          departmentId = 8;
         break;
       }
 
-      sql = `INSERT INTO role (title, department_id, salary) VALUES ("${data.role}", ${departmentName}, ${data.salary})`;
+      sql = `INSERT INTO role (title, department_id, salary) VALUES ("${data.role}", ${departmentId}, ${data.salary})`;
       postData(sql);
     })
 }
@@ -411,7 +429,7 @@ function choicePrompt() {
       switch(data.choice) {
 
         case 'View All Departments':
-          sql = `SELECT id AS id,  name AS department FROM department`;
+          sql = `SELECT id AS id, name AS department FROM department`;
           getData(sql);
         break;
 
