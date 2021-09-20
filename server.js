@@ -1,6 +1,7 @@
 const express = require('express');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const { exit } = require('process');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -25,6 +26,8 @@ let employeeId;
 let managerId;
 let employeeArray = ["James Smith", "Maria Garcia", "Elija Wang", "Amelia Lopez", "Leo Hassan", "Isabella Ren", "Asher Bibi", "Nushi Pak", "Mohammed Kumari", "Ana Sanchez", "Robert Mandal", "Jean Sharma", "Carlos Ramirez", "Elena de Oliveira", "Fatima Ghosh", "Sergey Uddin"];
 let departmentArray = ["Production", "Web Development", "Marketing", "Accounting and Finance"];
+let roleArray = ["Machine Setup Specialist", "Maintenance Personnel", "Machine Operator", "Production Manager", "Front-End Web Developer", "Back-End Web Developer", "Full Stack Web Developer", "Web Development Manager", "Project Manager", "Analytics Specialist", "Brand Manager", "Marketing Analyst", "Payroll", "Financial Statements", "Tax and Compliance", "Finance Manager"];
+let managerArray = ["James Smith", "Maria Garcia", "Elija Wang", "Amelia Lopez", "Leo Hassan"];
 
 function getData(sql) {  
 
@@ -89,42 +92,18 @@ function roleEntry() {
     ])
     .then(function(data) {
 
-      switch (data.department_id) {
+      for (let i = 0; i < departmentArray.length; i++) {
+        
+        switch (data.department_id) {
 
-        case departmentArray[0]:
-          departmentId = 1;
-        break;
-
-        case departmentArray[1]:
-          departmentId = 2;
-        break;
-
-        case departmentArray[2]:
-          departmentId = 3;
-        break;
-
-        case departmentArray[3]:
-          departmentId = 4;
-        break;
-
-        case departmentArray[4]:
-          departmentId = 5;
-        break;
-
-        case departmentArray[5]:
-          departmentId = 6;
-        break;
-
-        case departmentArray[6]:
-          departmentId = 7;
-        break;
-
-        case departmentArray[7]:
-          departmentId = 8;
-        break;
+          case departmentArray[i]:
+            departmentId = (i + 1);
+          break;
+        }
       }
 
       sql = `INSERT INTO role (title, department_id, salary) VALUES ("${data.role}", ${departmentId}, ${data.salary})`;
+      roleArray.push(`${data.role}`)
       postData(sql);
     })
 }
@@ -146,105 +125,35 @@ function employeeEntry() {
         type: 'list',
         message: "What is the employee's role?",
         name: 'role_id',
-        choices: ["Machine Setup Specialist", "Maintenance Personnel", "Machine Operator", "Production Manager", "Front-End Web Developer", "Back-End Web Developer", "Full Stack Web Developer", "Web Development Manager", "Project Manager", "Analytics Specialist", "Brand Manager", "Marketing Analyst", "Payroll", "Financial Statements", "Tax and Compliance", "Finance Manager"],
+        choices: [...roleArray],
       },
       {
         type: 'list',
         message: "Who is the employee's manager?",
         name: 'manager_id',
-        choices: ["James Smith", "Maria Garcia", "Elija Wang", "Amelia Lopez", "Leo Hassan"],
+        choices: [...managerArray],
       },
     ])
     .then(function(data) {
 
-      switch (data.role_id) {
+      for (let i = 0; i < roleArray.length; i++) {
+        
+        switch (data.role_id) {
 
-        case 'Machine Setup Specialist':
-          roleId = 1;
-        break;
-
-        case 'Maintenance Personnel':
-          roleId = 2;
-        break;
-
-        case 'Machine Operator':
-          roleId = 3;
-        break;
-
-        case 'Production Manager':
-          roleId = 4;
-        break;
-
-        case 'Front-End Web Developer':
-          roleId = 5;
-        break;
-
-        case 'Back-End Web Developer':
-          roleId = 6;
-        break;
-
-        case 'Full Stack Web Developer':
-          roleId = 7;
-        break;
-
-        case 'Web Development Manager':
-          roleId = 8;
-        break;
-
-        case 'Project Manager':
-          roleId = 9;
-        break;
-
-        case 'Analytics Specialist':
-          roleId = 10;
-        break;
-
-        case 'Brand Manager':
-          roleId = 11;
-        break;
-
-        case 'Marketing Analyst':
-          roleId = 12;
-        break;
-
-        case 'Payroll':
-          roleId = 13;
-        break;
-
-        case 'Financial Statements':
-          roleId = 14;
-        break;
-
-        case 'Tax and Compliance':
-          roleId = 15;
-        break;
-
-        case 'Finance Manager':
-          roleId = 16;
-        break;
+          case roleArray[i]:
+            roleId = (i + 1);
+          break;
+        }
       }
 
-      switch (data.manager_id) {
+      for (let i = 0; i < managerArray.length; i++) {
+        
+        switch (data.manager_id) {
 
-        case 'James Smith':
-          managerId = 1;
-        break;
-
-        case 'Maria Garcia':
-          managerId = 2;
-        break;
-
-        case 'Elija Wang':
-          managerId = 3;
-        break;
-
-        case 'Amelia Lopez':
-          managerId = 4;
-        break;
-
-        case 'Leo Hassan':
-          managerId = 5;
-        break;
+          case managerArray[i]:
+            managerId = (i + 1);
+          break;
+        }
       }
 
       sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${data.first_name}", "${data.last_name}", ${roleId}, ${managerId})`;
@@ -266,7 +175,7 @@ function employeeUpdate() {
         type: 'list',
         message: "Which role do you want to assign the selected employee?",
         name: 'roleName',
-        choices: ["Machine Setup Specialist", "Maintenance Personnel", "Machine Operator", "Production Manager", "Front-End Web Developer", "Back-End Web Developer", "Full Stack Web Developer", "Web Development Manager", "Project Manager", "Analytics Specialist", "Brand Manager", "Marketing Analyst", "Payroll", "Financial Statements", "Tax and Compliance", "Finance Manager"],
+        choices: [...roleArray],
       },
     ])
     .then(function(data) {
@@ -275,138 +184,24 @@ function employeeUpdate() {
       // let first_name = nameArray[0];
       // let last_name = nameArray[1];
 
-      // switch (data.employeeName) {
+      for (let i = 0; i < employeeArray.length; i++) {
+        
+        switch (data.employeeName) {
 
-      //   case "James Smith":
-      //     employeeId = 1;
-      //   break;
+          case employeeArray[i]:
+            employeeId = (i + 1);
+          break;
+        }
+      }
 
-      //   case "Maria Garcia":
-      //     employeeId = 2;
-      //   break;
+      for (let i = 0; i < roleArray.length; i++) {
+        
+        switch (data.roleName) {
 
-      //   case "Elija Wang":
-      //     employeeId = 3;
-      //   break;
-
-      //   case "Amelia Lopez":
-      //     employeeId = 4;
-      //   break;
-
-      //   case "Leo Hassan":
-      //     employeeId = 5;
-      //   break;
-
-      //   case "Isabella Ren":
-      //     employeeId = 6;
-      //   break;
-
-      //   case "Asher Bibi":
-      //     employeeId = 7;
-      //   break;
-
-      //   case "Nushi Pak":
-      //     employeeId = 8;
-      //   break;
-
-      //   case "Mohammed Kumari":
-      //     employeeId = 9;
-      //   break;
-
-      //   case "Ana Sanchez":
-      //     employeeId = 10;
-      //   break;
-
-      //   case "Robert Mandal":
-      //     employeeId = 11;
-      //   break;
-
-      //   case "Jean Sharma":
-      //     employeeId = 12;
-      //   break;
-
-      //   case "Carlos Ramirez":
-      //     employeeId = 13;
-      //   break;
-
-      //   case "Elena de Oliveira":
-      //     employeeId = 14;
-      //   break;
-
-      //   case "Fatima Ghosh":
-      //     employeeId = 15;
-      //   break;
-
-      //   case "Sergey Uddin":
-      //     employeeId = 16;
-      //   break;
-      // }
-
-      switch (data.roleName) {
-
-        case 'Machine Setup Specialist':
-          roleId = 1;
-        break;
-
-        case 'Maintenance Personnel':
-          roleId = 2;
-        break;
-
-        case 'Machine Operator':
-          roleId = 3;
-        break;
-
-        case 'Production Manager':
-          roleId = 4;
-        break;
-
-        case 'Front-End Web Developer':
-          roleId = 5;
-        break;
-
-        case 'Back-End Web Developer':
-          roleId = 6;
-        break;
-
-        case 'Full Stack Web Developer':
-          roleId = 7;
-        break;
-
-        case 'Web Development Manager':
-          roleId = 8;
-        break;
-
-        case 'Project Manager':
-          roleId = 9;
-        break;
-
-        case 'Analytics Specialist':
-          roleId = 10;
-        break;
-
-        case 'Brand Manager':
-          roleId = 11;
-        break;
-
-        case 'Marketing Analyst':
-          roleId = 12;
-        break;
-
-        case 'Payroll':
-          roleId = 13;
-        break;
-
-        case 'Financial Statements':
-          roleId = 14;
-        break;
-
-        case 'Tax and Compliance':
-          roleId = 15;
-        break;
-
-        case 'Finance Manager':
-          roleId = 16;
-        break;
+          case roleArray[i]:
+            roleId = (i + 1);
+          break;
+        }
       }
 
       sql = `UPDATE employee SET role_id = ${roleId} WHERE id = "${employeeId}"`
