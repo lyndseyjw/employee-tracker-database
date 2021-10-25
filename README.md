@@ -18,7 +18,7 @@ To watch a video of how to deploy the application, I invite you to click here : 
 
 ## Languages & Technologies Used
 
-Javascript, Node, NPMs, mySQL
+Javascript, Node, NPMs, mySQL, Sequelize, Inquirer
 
 ## License
 
