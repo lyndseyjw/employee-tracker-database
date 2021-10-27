@@ -14,7 +14,8 @@ This has also fueled my passion for full stack as I begin the process of impleme
 
 ## Installation & Usage 
 
-To watch a video of how to deploy the application, I invite you to click here : https://drive.google.com/file/d/1Y8xz6AzSLeE4SS89jjYlznI2y-PvsYNw/view
+At the moment, this is a back end only application.
+To watch a video of how to deploy, I invite you to click here : https://drive.google.com/file/d/1Y8xz6AzSLeE4SS89jjYlznI2y-PvsYNw/view
 
 ## Languages & Technologies Used
 
